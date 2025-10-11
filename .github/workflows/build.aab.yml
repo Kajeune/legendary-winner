@@ -1,20 +1,20 @@
-Yaml
+
 
 name: Build Popi AAB
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      -name: Checkout repository 
-       uses: actions/checkout@v4
-
+      - name: Checkout repository 
+        uses: actions/checkout@v4
+      
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -23,13 +23,12 @@ jobs:
 
       - name: Decode keystore
         run: echo "$
-{{ Secrets.KEYSTORE_BASE64 }}" | base64
+{{ Secrets.KEYSTORE_BASE64 }}: base64
 --decode > my-release-key.jks
 
-      -name: Build Signed AAB (Popi)
-       run: |
-         ./gradlew :Popi:bundleRelease
-\
+       - name: Build Signed AAB (Popi)
+         run: |
+         ./gradlew :Popi:bundleRelease\
 
 -Pandroid.injected.signing.store.file=my-re
  lease-key.jks \
@@ -45,7 +44,7 @@ jobs:
 
       -name: Upload Signed AAB
        uses: actions/upload-artifact@v4
-       with:
+       with
            name: Popi-release
            path: Popi/build/outputs/
-bundle/release/* .aab
+bundle/release/*.aab
