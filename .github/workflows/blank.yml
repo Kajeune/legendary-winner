@@ -1,0 +1,30 @@
+name: Build LiveWave AAB
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Decode Keystore2
+        run: echo "${{ secrets.KEYSTORE2_BASE64 }}" | base64 --decode >my-release-key.jks
+      - name: Build Signed AAB (LiveWave)
+        run: |
+          ./gradlew :LiveWave:bundlRelease \
+           -Pandroid.injected.signing.store.file=my-release-key.jks \
+           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD2 }} \
+           -Pandroid.injected.signing.key.alias2=${{ secrets.KEY_ALIAS2 }} \
+           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD2 }}
+      - name: Upload Signed AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveWave-release
+          path: LiveWave/build/outputs/bundle/release/*.aab
