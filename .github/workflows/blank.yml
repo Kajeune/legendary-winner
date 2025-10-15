@@ -18,7 +18,7 @@ jobs:
         run: echo "${{ secrets.KEYSTORE2_BASE64 }}" | base64 --decode >my-release-key.jks
       - name: Build AAB for LiveWave
         run: |
-          ./gradlew :LiveWave:bundlRelease \
+          ./gradlew bundlRelease \
            -Pandroid.injected.signing.store.file=my-release-key.jks \
            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD2 }} \
            -Pandroid.injected.signing.key.alias2=${{ secrets.KEY_ALIAS2 }} \
