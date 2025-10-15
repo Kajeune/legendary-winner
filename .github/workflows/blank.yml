@@ -15,11 +15,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Decode Keystore2
-        run: echo "${{ secrets.KEYSTORE2_BASE64 }}" | base64 --decode >my-release-key.jks
+        run: echo "${{ secrets.KEYSTORE2_BASE64 }}" | base64 --decode >my-keystore2.jks
       - name: Build AAB for LiveWave
         run: |
           ./gradlew bundlRelease \
-           -Pandroid.injected.signing.store.file=my-release-key.jks \
+           -Pandroid.injected.signing.store.file=my-keystore2.jks \
            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD2 }} \
            -Pandroid.injected.signing.key.alias2=${{ secrets.KEY_ALIAS2 }} \
            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD2 }}
